@@ -1,0 +1,14 @@
+FROM <base image name>
+
+RUN yum install -y \
+        openssh-server
+
+
+RUN  mkdir /var/run/sshd
+RUN echo 'root:Passw0rd' | chpasswd
+RUN sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+RUN sshd-keygen
+
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]
